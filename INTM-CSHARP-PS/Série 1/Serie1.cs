@@ -127,19 +127,19 @@ namespace INTM.Serie1
         {
             int gauche;
             int droite;
-            char oddsymbol = '+';
-            char toWrite;
-            char evensymbol;
+            char symboleImpair = '+';
+            char aEcrire;
+            char symbolePair;
             string pyramidType;
 
             if (isSmooth)
             {
-                evensymbol = '+';
+                symbolePair = '+';
                 pyramidType = "lisse";
             }
             else
             {
-                evensymbol = '-';
+                symbolePair = '-';
                 pyramidType = "strillée";
             }
 
@@ -153,21 +153,105 @@ namespace INTM.Serie1
 
                 if ((niv + 1) % 2 == 0)
                 {
-                    toWrite = evensymbol;
+                    aEcrire = symbolePair;
                 }
                 else
                 {
-                    toWrite = oddsymbol;
+                    aEcrire = symboleImpair;
                 }
                 
                 for (int bord = gauche; bord <= droite; bord++)
                 {
-                    Console.Write(toWrite);
+                    Console.Write(aEcrire);
                 }
 
                 Console.Write('\n');
             }
             Console.WriteLine();
+        }
+        // Exercice IV - Factorielle
+
+        public static int IterFactorielle(int n)
+        {
+            if (n == 0)
+            {
+                return 1;
+            }
+
+            int res = 1;
+
+            for (int i = 1; i < n + 1; i++) 
+            {
+                res *= i;
+            }
+
+            return res;
+        }
+
+        public static int RecurFactorielle(int n)
+        {
+            if (n == 0)
+            {
+                return 1;
+            }
+
+            return n * RecurFactorielle(n - 1);
+        }
+
+        // Exercice V - Les nombres premiers
+
+        public static bool IsPrime(int valeur)
+        {
+            if (valeur == 2)
+            {
+                return true;
+            }
+
+            if (valeur % 2 == 0)
+            {
+                return false;
+            }
+
+            int limite = (int)Math.Sqrt(valeur) + 1;
+
+            for (int i = 3; i < limite; i += 2)
+            {
+                if (valeur % i == 0) 
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public static void DisplayPrimes()
+        {
+            Console.WriteLine("Liste des 100 premiers nombres premiers: \n");
+            Console.Write("[ ");
+
+            for (int i = 2; i < 101; i++)
+            {
+                if (IsPrime(i))
+                {
+                    Console.Write(i + " ");
+                }
+            }
+            Console.Write("]\n");
+        }
+
+        // Exercice VI - Algorithme d'Euclide
+
+        public static int Gcd(int a, int b)
+        {
+            if (b == 0)
+            {
+                return a;
+            }
+
+            int r = a % b;
+
+            return Gcd(b, r);
         }
 
     }
