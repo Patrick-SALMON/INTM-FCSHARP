@@ -164,6 +164,7 @@ namespace INTM.Serie1
                 {
                     Console.Write(toWrite);
                 }
+
                 Console.Write('\n');
             }
             Console.WriteLine();
