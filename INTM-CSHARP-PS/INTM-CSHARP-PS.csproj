@@ -46,6 +46,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Série 1\Serie1.cs" />
+    <Compile Include="Série 2\Serie2.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
