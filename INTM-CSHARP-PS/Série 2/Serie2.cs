@@ -265,6 +265,21 @@ namespace INTM.Serie2
             public string[] Answers;
             public int Solution;
             public int Weight;
+
+            /// <summary>
+            /// Constructeur de Qcm
+            /// </summary>
+            /// <param name="question">Question à poser.</param>
+            /// <param name="answers">Réponses possibles.</param>
+            /// <param name="solution">Indice de la bonne réponse.</param>
+            /// <param name="weight">Poids de la question.</param>
+            public Qcm(string question, string[] answers, int solution, int weight)
+            {
+                Question = question;
+                Answers = answers;
+                Solution = solution;
+                Weight = weight;
+            }
         }
 
         /// <summary>
@@ -274,6 +289,11 @@ namespace INTM.Serie2
         /// <returns>False si la structure n'est pas valide et True sinon.</returns>
         public static bool QcmValidity(Qcm qcm)
         {
+            if (qcm.Question == null || qcm.Answers == null)
+            {
+                return false;
+            }
+
             if (qcm.Solution < 0 || qcm.Solution >= qcm.Answers.Length)
             {
                 return false;
@@ -287,6 +307,12 @@ namespace INTM.Serie2
             return true;
         }
 
+        /// <summary>
+        /// Pose une question donnée dans la structure qcm à l'utilisateur.
+        /// </summary>
+        /// <param name="qcm">Structure contenant la question à poser, la réponse et le poids de la question.</param>
+        /// <returns>0 si la réponse est fausse et le poids associé à la question si elle est juste.</returns>
+        /// <exception cref="ArgumentException"></exception>
         public static int AskQuestion(Qcm qcm)
         {
             if (!QcmValidity(qcm))
@@ -294,27 +320,49 @@ namespace INTM.Serie2
                 throw new ArgumentException("Le qcm en entrée est invalide", "qcm");
             }
 
-            Console.Write("\n" + qcm.Question + "\n");
+            Console.WriteLine(qcm.Question);
 
             for (int i = 0; i < qcm.Answers.Length; i++)
             {
-                Console.Write($"{i + 1}. {qcm.Answers[i]} ");
+                Console.Write($"{i + 1}. {qcm.Answers[i]}   ");
             }
             Console.WriteLine();
 
-            string input;
+            string input = "";
             int reponse = -1;
 
-            while (reponse < 0 || reponse >= qcm.Answers.Length)
+            while (!int.TryParse(input, out reponse) || reponse <= 0 || reponse > qcm.Answers.Length) 
             {
                 Console.Write("Réponse : ");
                 input = Console.ReadLine();
 
-                if (!int.TryParse(input, out reponse) || reponse < 0 || reponse >= qcm.Answers.Length )
+                if (!int.TryParse(input, out reponse) || reponse <= 0 || reponse > qcm.Answers.Length )
+
                 {
-                    Console.WriteLine("\nRéponse invalide !\n");
+                    Console.WriteLine("Réponse invalide !");
                 }
             }
+
+            if (reponse == qcm.Solution + 1)
+            {
+                return qcm.Weight;
+            }
+
+            return 0;
+        }
+
+        public static void AskQuestions(Qcm[] qcms)
+        {
+            int scoreTotal = 0;
+            int scoreCandidat = 0;
+            Console.WriteLine("Questionnaire :");
+
+            foreach (Qcm qcm in qcms)
+            {
+                scoreCandidat += AskQuestion(qcm);
+                scoreTotal += qcm.Weight;
+            }
+            Console.WriteLine($"Résultats du questionnaire : {scoreCandidat} / {scoreTotal}");
         }
 
     }

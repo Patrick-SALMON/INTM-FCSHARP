@@ -148,6 +148,41 @@ namespace INTM_CSHARP_PS
             }
             Console.Write("]\n");
 
+            Console.WriteLine("\n|----------------------------------------------|");
+            Console.WriteLine("| Exercice IV - Questionnaire à choix multiple |");
+            Console.WriteLine("|----------------------------------------------|\n");
+
+            Serie2.Qcm q1 = new Serie2.Qcm("Quand est l'année du sacre de Charlemagne ?", 
+                                           new string[] { "476", "800", "1066", "1789" }, 1, 1);
+            int score = -1;
+
+            try
+            {
+                score = Serie2.AskQuestion(q1);
+            }
+            catch (ArgumentException ae)
+            {
+                Console.WriteLine(ae.ToString());
+            }
+
+            if (score == 0)
+            {
+                Console.WriteLine("Réponse fausse\n");
+            }
+            else if (score > 0)
+            {
+                Console.WriteLine("Bonne réponse !\n");
+            }
+
+            Serie2.Qcm q2 = new Serie2.Qcm("Quel est le nom du président de la République en 2021 ?",
+                               new string[] { "Chirac", "De Gaulle", "Macron" }, 2, 1);
+            Serie2.Qcm q3 = new Serie2.Qcm("Quelle est la durée de vie moyenne d'une naine jaune (en milliards d'années) ?",
+                               new string[] { "1", "10", "1 000", "1 000 000" }, 1, 1);
+
+            Serie2.Qcm[] qTab = new Serie2.Qcm[] { q1, q2, q3 };
+
+            Serie2.AskQuestions(qTab);
+
             // Keep the console window open
             Console.WriteLine("\n----------------------");
             Console.WriteLine("Appuyer sur une touche pour quitter.");
