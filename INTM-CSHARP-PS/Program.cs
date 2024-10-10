@@ -220,6 +220,33 @@ namespace INTM_CSHARP_PS
                 Console.WriteLine(ae.ToString());
             }
 
+            string morseImp1 = "...===.=.===.=...===.===.===...===.=.=...=.....";
+            string morseImp2 = "===.=.===.=....===..===..===...===.=.=...=.....";
+
+            Console.WriteLine($"\nLe code morse suivant a {Serie4.EfficientLettersCount(morseImp1)} lettres");
+            Console.WriteLine(morseImp1);
+
+            Console.WriteLine($"\nLe code morse suivant a {Serie4.EfficientLettersCount(morseImp2)} lettres");
+            Console.WriteLine(morseImp2);
+
+            Console.WriteLine("\nTraduction du code morse efficace :\n");
+            try
+            {
+                Console.WriteLine($"{morseImp1} : {Serie4.EfficientMorseTranslation(morseImp1)}\n");
+                Console.WriteLine($"{morseImp2} : {Serie4.EfficientMorseTranslation(morseImp2)}");
+            }
+            catch (ArgumentException ae)
+            {
+                Console.WriteLine(ae.ToString());
+            }
+
+            Console.WriteLine("\nLa phrase CODE MORSE s'écrit en morse comme: ");
+            Console.WriteLine(Serie4.MorseEncryption("CODE MORSE"));
+
+            Console.WriteLine("\n|----------------------------------------|");
+            Console.WriteLine("| Exercice II - Contrôle des parenthèses |");
+            Console.WriteLine("|----------------------------------------|\n");
+
             // Keep the console window open
             Console.WriteLine("\n----------------------");
             Console.WriteLine("Appuyer sur une touche pour quitter.");
