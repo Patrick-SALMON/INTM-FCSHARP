@@ -264,7 +264,130 @@ namespace INTM.Serie4
         }
 
         // Exercice II - Contrôle des parenthèses
+        // On va utiliser un stack pour le traitement, à chaque caractère ouvrant qu'on trouve il faut qu'on trouve le caractère fermant correspondant
+        // en premier donc le stack est bien adapté à notre problème. On utilisera aussi un dictionnaire pour faire la liaision des membres ouvrant avec les membres fermant
 
+        /// <summary>
+        /// Vérifie dans une chaine de caractères que tous les caractères ouvrant se ferment bien.
+        /// </summary>
+        /// <param name="sentence">Texte à vérifier.</param>
+        /// <returns>True si la chaine est correcte et False sinon.</returns>
+        public static bool BracketsControls(string sentence)
+        {
+            if (sentence == null || sentence.Length == 0)
+            {
+                return true;
+            }
+
+            Stack<char> pile = new Stack<char>();
+            Dictionary<char, char> dictOuvrantFermant = new Dictionary<char, char>
+            {
+                {'(',')'},
+                {'[',']'},
+                {'{','}'}
+            };
+
+            for (int i = 0; i < sentence.Length; i++)
+            {
+                if (dictOuvrantFermant.ContainsKey(sentence[i]))
+                {
+                    pile.Push(sentence[i]);
+                }
+                else if (dictOuvrantFermant.ContainsValue(sentence[i]))
+                {
+                    if (pile.Count() == 0)
+                    {
+                        return false;
+                    }
+
+                    if (sentence[i] != dictOuvrantFermant[pile.Pop()])
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        // Exercice III - Liste des contacts téléphoniques
+        // On va utiliser un dictionnaire pour associer les numéros aux contacts
+        
+        public struct PhoneBook
+        {
+            public static Dictionary<string, string> dictPhoneBook = new Dictionary<string, string>();
+
+            public bool IsValidPhoneNumber(string phoneNumber)
+            {
+                if (phoneNumber == null || phoneNumber.Length != 10)
+                {
+                    return false;
+                }
+                else if (phoneNumber[0] != '0' || phoneNumber[1] == 0 )
+                {
+                    return false;
+                }
+                return true;
+            }
+
+            public bool ContainsPhoneNumber(string phoneNumber)
+            {
+                if (!IsValidPhoneNumber(phoneNumber))
+                {
+                    return false;
+                }
+                else if (!dictPhoneBook.ContainsKey(phoneNumber))
+                {
+                    return false;
+                }
+
+                return true;
+            }
+
+            public string PhoneContact(string phoneNumber)
+            {
+                if (!ContainsPhoneNumber(phoneNumber))
+                {
+                    throw new KeyNotFoundException("Le format du numéro recherché est invalide ou il n'existe pas dans l'annuaire.");
+                }
+                return dictPhoneBook[phoneNumber];
+            }
+
+            public bool AddPhoneNumber(string phoneNumber, string name)
+            {
+                if (ContainsPhoneNumber(phoneNumber) || !IsValidPhoneNumber(phoneNumber) || name == null || name.Length == 0)
+                {
+                    return false;
+                }
+
+                dictPhoneBook.Add(phoneNumber, name);
+                return true;
+            }
+
+            public bool DeletePhoneNumber(string phoneNumber)
+            {
+                if (!ContainsPhoneNumber(phoneNumber))
+                {
+                    throw new KeyNotFoundException("Le format du numéro à supprimer est invalide ou il n'existe pas dans l'annuaire.");
+                }
+
+                return dictPhoneBook.Remove(phoneNumber);
+            }
+
+            public void DisplayPhoneBook()
+            {
+                if (dictPhoneBook.Count() != 0)
+                {
+                    Console.WriteLine("Annuaire téléphonique :");
+                    Console.WriteLine("-----------------------");
+                    foreach (KeyValuePair<string,string> keyValuePair in dictPhoneBook)
+                    {
+                        Console.WriteLine($"{keyValuePair.Key} : {keyValuePair.Value}");
+                    }
+                    Console.WriteLine("-----------------------");
+                }
+            }
+        }
 
     }
 }

@@ -247,6 +247,67 @@ namespace INTM_CSHARP_PS
             Console.WriteLine("| Exercice II - Contrôle des parenthèses |");
             Console.WriteLine("|----------------------------------------|\n");
 
+            Console.WriteLine("Contrôle des parenthèses :");
+            Console.Write("() : ");
+            if (Serie4.BracketsControls("()"))
+            {
+                Console.WriteLine("OK");
+            }
+            else
+            {
+                Console.WriteLine("KO");
+            }
+
+            Console.Write("(] : ");
+            if (Serie4.BracketsControls("(]"))
+            {
+                Console.WriteLine("OK");
+            }
+            else
+            {
+                Console.WriteLine("KO");
+            }
+
+            Console.Write("{[]()} : ");
+            if (Serie4.BracketsControls("{[]()}"))
+            {
+                Console.WriteLine("OK");
+            }
+            else
+            {
+                Console.WriteLine("KO");
+            }
+
+            Console.Write("{[{}{]}]()} : ");
+            if (Serie4.BracketsControls("{[{}{]}]()}"))
+            {
+                Console.WriteLine("OK");
+            }
+            else
+            {
+                Console.WriteLine("KO");
+            }
+
+            Console.WriteLine("\n|-------------------------------------------------|");
+            Console.WriteLine("| Exercice III - Liste des contacts téléphoniques |");
+            Console.WriteLine("|-------------------------------------------------|\n");
+
+            Serie4.PhoneBook annuaire = new Serie4.PhoneBook();
+
+            annuaire.AddPhoneNumber("0601020304", "Giselle");
+            annuaire.AddPhoneNumber("0486019304", "Coiffeur");
+
+            annuaire.DisplayPhoneBook();
+
+            try
+            {
+                annuaire.DeletePhoneNumber("0101010101");
+            }
+            catch (KeyNotFoundException ke)
+            {
+                Console.WriteLine(ke.ToString());
+            }
+
             // Keep the console window open
             Console.WriteLine("\n----------------------");
             Console.WriteLine("Appuyer sur une touche pour quitter.");
