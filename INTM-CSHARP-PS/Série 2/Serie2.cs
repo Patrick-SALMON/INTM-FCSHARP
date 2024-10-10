@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace INTM.Serie2
 {
-    class Serie2
+    public static class Serie2
     {
         // Exercice I - Recherche d'un élément
 
@@ -351,6 +351,11 @@ namespace INTM.Serie2
             return 0;
         }
 
+        /// <summary>
+        /// Pose une série de questions à l'utilisateur et affiche son score final.
+        /// </summary>
+        /// <param name="qcms">Tableau de questions à poser.</param>
+        /// <exception cref="ArgumentException "></exception> 
         public static void AskQuestions(Qcm[] qcms)
         {
             int scoreTotal = 0;

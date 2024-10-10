@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using INTM.Serie1;
 using INTM.Serie2;
+using INTM.Serie4;
 
 namespace INTM_CSHARP_PS
 {
@@ -86,7 +87,7 @@ namespace INTM_CSHARP_PS
 
             Console.WriteLine($"\nPGCD de {a} et {b} : {Serie1.Gcd(a, b)}");
             */
-
+            /*
             Console.WriteLine("|--------------------------------------|");
             Console.WriteLine("|              Série 2                 |");
             Console.WriteLine("|--------------------------------------|\n");
@@ -181,7 +182,43 @@ namespace INTM_CSHARP_PS
 
             Serie2.Qcm[] qTab = new Serie2.Qcm[] { q1, q2, q3 };
 
-            Serie2.AskQuestions(qTab);
+            try
+            {
+                Serie2.AskQuestions(qTab);
+            }
+            catch (ArgumentException ae)
+            {
+                Console.WriteLine(ae.ToString());
+            }
+            */
+
+            Console.WriteLine("|--------------------------------------|");
+            Console.WriteLine("|              Série 4                 |");
+            Console.WriteLine("|--------------------------------------|\n");
+
+            Console.WriteLine("\n|--------------------------------------|");
+            Console.WriteLine("| Exercice I - Code Morse              |");
+            Console.WriteLine("|--------------------------------------|\n");
+
+            string morse = "===.=.===.=...===.===.===...===.=.=...=.....===.===...===.===.===...=.===.=...=.=.=...=";
+            string morseErr = "=...=.===.=...==...===.===.===...=.===.=";
+
+            Console.WriteLine($"Le code morse suivant a {Serie4.LettersCount(morse)} lettres");
+            Console.WriteLine(morse);
+
+            Console.WriteLine($"\nLe code morse suivant a {Serie4.WordsCount(morse)} mots");
+            Console.WriteLine(morse);
+
+            Console.WriteLine("\nTraduction du code morse :\n");
+            try
+            {
+                Console.WriteLine($"{morse} : {Serie4.MorseTranslation(morse)}\n");
+                Console.WriteLine($"{morseErr} : {Serie4.MorseTranslation(morseErr)}");
+            }
+            catch (ArgumentException ae)
+            {
+                Console.WriteLine(ae.ToString());
+            }
 
             // Keep the console window open
             Console.WriteLine("\n----------------------");
