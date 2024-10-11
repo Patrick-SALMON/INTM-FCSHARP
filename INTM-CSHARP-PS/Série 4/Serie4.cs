@@ -387,6 +387,8 @@ namespace INTM.Serie4
                     Console.WriteLine("-----------------------");
                 }
             }
+
+            // Exercice IV - Emploi du temps professionnel
         }
 
     }
