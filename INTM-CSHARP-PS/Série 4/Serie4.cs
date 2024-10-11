@@ -43,7 +43,7 @@ namespace INTM.Serie4
         };
 
         /// <summary>
-        /// Renvoie le nombre d'un lettres d'un code morse.
+        /// Renvoie le nombre de lettres d'un code morse.
         /// </summary>
         /// <param name="code">Code morse.</param>
         /// <returns>Entier correspondant au nombre de lettres du code.</returns>
@@ -373,6 +373,12 @@ namespace INTM.Serie4
                 return dictPhoneBook[phoneNumber];
             }
 
+            /// <summary>
+            /// Ajoute un numéro de téléphone accompagné d'un nom de contact à l'annuaire.
+            /// </summary>
+            /// <param name="phoneNumber">Numéro de téléphone à rajouter.</param>
+            /// <param name="name">Nom du contact associé.</param>
+            /// <returns>True si l'ajout a réussi et False sinon.</returns>
             public bool AddPhoneNumber(string phoneNumber, string name)
             {
                 if (ContainsPhoneNumber(phoneNumber) || !IsValidPhoneNumber(phoneNumber) || name == null || name.Length == 0)
@@ -384,6 +390,12 @@ namespace INTM.Serie4
                 return true;
             }
 
+            /// <summary>
+            /// Supprime un numéro de téléphone de l'annuaire.
+            /// </summary>
+            /// <param name="phoneNumber">Numéro de téléphone à supprimer.</param>
+            /// <returns>True si le numéro a bien été supprimé et False sinon.</returns>
+            /// <exception cref="KeyNotFoundException"></exception>
             public bool DeletePhoneNumber(string phoneNumber)
             {
                 if (!ContainsPhoneNumber(phoneNumber))
@@ -394,6 +406,9 @@ namespace INTM.Serie4
                 return dictPhoneBook.Remove(phoneNumber);
             }
 
+            /// <summary>
+            /// Affiche la liste des numéros de téléphones et leurs contacts associés.
+            /// </summary>
             public void DisplayPhoneBook()
             {
                 if (dictPhoneBook.Count() != 0)
