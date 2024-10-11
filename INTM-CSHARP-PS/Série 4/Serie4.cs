@@ -311,12 +311,21 @@ namespace INTM.Serie4
         }
 
         // Exercice III - Liste des contacts téléphoniques
-        // On va utiliser un dictionnaire pour associer les numéros aux contacts
+        // On va utiliser un dictionnaire pour associer les numéros aux contacts car on peut assurer l'unicité du numéro de téléphone en l'utilisant
+        // comme clé du dictionnaire
         
+        /// <summary>
+        /// Structure représentant un annuaire.
+        /// </summary>
         public struct PhoneBook
         {
             public static Dictionary<string, string> dictPhoneBook = new Dictionary<string, string>();
 
+            /// <summary>
+            /// Vérifie que le numéro de téléphone donné est dans un format valide
+            /// </summary>
+            /// <param name="phoneNumber">Numéro de téléphone à vérifier.</param>
+            /// <returns>True si le numéro est valide et False sinon.</returns>
             public bool IsValidPhoneNumber(string phoneNumber)
             {
                 if (phoneNumber == null || phoneNumber.Length != 10)
@@ -330,6 +339,11 @@ namespace INTM.Serie4
                 return true;
             }
 
+            /// <summary>
+            /// Vérifie si le numéro de téléphone donné existe dans notre dictionnaire.
+            /// </summary>
+            /// <param name="phoneNumber">Numéro de téléphone à vérifier.</param>
+            /// <returns>True si le numéro existe dans le dictionnaire et False si le numéro est invalide ou s'il n'existe pas dans le dictionnaire.</returns>
             public bool ContainsPhoneNumber(string phoneNumber)
             {
                 if (!IsValidPhoneNumber(phoneNumber))
@@ -344,6 +358,12 @@ namespace INTM.Serie4
                 return true;
             }
 
+            /// <summary>
+            /// Recherche le nom du contact associé à un numéro de téléphone donné.
+            /// </summary>
+            /// <param name="phoneNumber">Numéro de téléphone à rechercher.</param>
+            /// <returns>Le nom du contact dans le dictionnaire.</returns>
+            /// <exception cref="KeyNotFoundException"></exception>
             public string PhoneContact(string phoneNumber)
             {
                 if (!ContainsPhoneNumber(phoneNumber))
