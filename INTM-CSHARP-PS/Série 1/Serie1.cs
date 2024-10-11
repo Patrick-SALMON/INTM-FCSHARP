@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace INTM.Serie1
 {
+    // J'ai pas à dire grand chose, le code est bien présenté, indenté correctement. 
+    // Il remplit de ce que j'ai contrôlé aux consignes des exercices.
     public static class Serie1
     {
         // Exercice I - Opérations élémentaires
@@ -216,7 +218,7 @@ namespace INTM.Serie1
 
             for (int i = 3; i < limite; i += 2)
             {
-                if (valeur % i == 0) 
+                if (valeur % i == 0)
                 {
                     return false;
                 }
