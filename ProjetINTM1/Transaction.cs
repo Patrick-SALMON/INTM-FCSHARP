@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ProjetINTM1
 {
+    /// <summary>
+    /// Correspond à une transaction monétaire entre deux comptes ou avec la console si l'un des comptes est 0.
+    /// </summary>
     class Transaction
     {
         public uint Identifiant { get; private set; }
@@ -13,6 +16,14 @@ namespace ProjetINTM1
         public uint Expediteur { get; private set; }
         public uint Destinataire { get; private set; }
 
+        /// <summary>
+        /// Définition d'une nouvelle transaction. montant doit être non nul. Si montant est négatif, sa valeur absolue est utilisée.
+        /// </summary>
+        /// <param name="identifiant">Identifiant de la transaction.</param>
+        /// <param name="montant">Montant de la transaction.</param>
+        /// <param name="expediteur">L'expéditeur de la transaction, c'est un identifiant de compte.</param>
+        /// <param name="destinataire">Le destinataire de la transaction, c'est un identifiant de compte.</param>
+        /// <exception cref="ArgumentException"></exception>
         public Transaction(uint identifiant, decimal montant, uint expediteur, uint destinataire)
         {
             Identifiant = identifiant;
