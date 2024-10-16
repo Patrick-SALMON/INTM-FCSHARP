@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Percolation", "..\Percolati
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjetINTM1", "..\ProjetINTM1\ProjetINTM1.csproj", "{802605E1-E065-4BB4-A2EA-8B43B58E57B0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjetINTM2", "..\ProjetINTM2\ProjetINTM2.csproj", "{3CC8A35C-F593-4A4E-AE8E-49C66E647D11}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{802605E1-E065-4BB4-A2EA-8B43B58E57B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{802605E1-E065-4BB4-A2EA-8B43B58E57B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{802605E1-E065-4BB4-A2EA-8B43B58E57B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CC8A35C-F593-4A4E-AE8E-49C66E647D11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CC8A35C-F593-4A4E-AE8E-49C66E647D11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CC8A35C-F593-4A4E-AE8E-49C66E647D11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CC8A35C-F593-4A4E-AE8E-49C66E647D11}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
