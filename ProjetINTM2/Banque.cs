@@ -84,8 +84,8 @@ namespace ProjetINTM2
             string[] ligneTransaction = new string[0];
             DateTime dateOperationCompte = new DateTime();
             DateTime dateOperationTransaction = new DateTime();
-            bool lireCompte = true;
-            bool lireTransaction = true;
+            bool ligneCompteTraitee = true;
+            bool ligneTransactionTraitee = true;
 
             if (!File.Exists(comptesFilePath))
             {
@@ -112,9 +112,9 @@ namespace ProjetINTM2
                 {
                     return;
                 }
-                while (!lecComptes.EndOfStream || !lecTransactions.EndOfStream || !lireCompte || !lireTransaction)
+                while (!lecComptes.EndOfStream || !lecTransactions.EndOfStream || !ligneCompteTraitee || !ligneTransactionTraitee)
                 {
-                    if (!lecComptes.EndOfStream && lireCompte)
+                    if (!lecComptes.EndOfStream && ligneCompteTraitee)
                     {
                         ligneCompte = lecComptes.ReadLine().Split(';');
                         while (ligneCompte.Length != 5 || !DateTime.TryParseExact(ligneCompte[1], "d", CultureInfo.GetCultureInfo("fr-FR"), DateTimeStyles.None, out dateOperationCompte))
@@ -128,7 +128,7 @@ namespace ProjetINTM2
                             ligneCompte = lecComptes.ReadLine().Split(';');
                         }
                     }
-                    if (!lecTransactions.EndOfStream && lireTransaction)
+                    if (!lecTransactions.EndOfStream && ligneTransactionTraitee)
                     {
                         ligneTransaction = lecTransactions.ReadLine().Split(';');
                         while (ligneTransaction.Length != 5 || !DateTime.TryParseExact(ligneTransaction[1], "d", CultureInfo.GetCultureInfo("fr-FR"), DateTimeStyles.None, out dateOperationTransaction))
@@ -145,79 +145,74 @@ namespace ProjetINTM2
 
                     if (dateOperationCompte < dateOperationTransaction)
                     {
-                        lireCompte = true;
-                        lireTransaction = false;
-                        if (TraiterOperationCompte(ligneCompte))
-                        {
-                            swComptes.WriteLine($"{ligneCompte[0]};OK");
-                        }
-                        else
-                        {
-                            swComptes.WriteLine($"{ligneCompte[0]};KO");
-                        }
+                        ligneCompteTraitee = true;
+                        ligneTransactionTraitee = false;
+                        swComptes.WriteLine(TraitementLigneCompte(ligneCompte));
                     }
                     else if (dateOperationCompte > dateOperationTransaction)
                     {
-                        lireCompte = false;
-                        lireTransaction = true;
-                        if (TraiterOperationTransaction(ligneTransaction))
-                        {
-                            swTransactions.WriteLine($"{ligneTransaction[0]};OK");
-                        }
-                        else
-                        {
-                            if (uint.TryParse(ligneTransaction[0], out uint identifiant))
-                            {
-                                swTransactions.WriteLine($"{identifiant};KO");
-                            }
-                            else
-                            {
-                                swTransactions.WriteLine("Identifiant illisible;KO");
-                            }
-                        }
+                        ligneCompteTraitee = false;
+                        ligneTransactionTraitee = true;
+                        swTransactions.WriteLine(TraitementLigneTransaction(ligneTransaction));
                     }
                     else if (dateOperationCompte == dateOperationTransaction)
                     {
-                        lireCompte = true;
-                        lireTransaction = true;
+                        ligneCompteTraitee = true;
+                        ligneTransactionTraitee = true;
                         if (dateOperationCompte != DateTime.MaxValue && dateOperationTransaction != DateTime.MaxValue)
                         {
-                            if (TraiterOperationCompte(ligneCompte))
-                            {
-                                swComptes.WriteLine($"{ligneCompte[0]};OK");
-                            }
-                            else
-                            {
-                                swComptes.WriteLine($"{ligneCompte[0]};KO");
-                            }
+                            swComptes.WriteLine(TraitementLigneCompte(ligneCompte));
 
-
-                            if (TraiterOperationTransaction(ligneTransaction))
-                            {
-                                swTransactions.WriteLine($"{ligneTransaction[0]};OK");
-                            }
-                            else
-                            {
-                                if (uint.TryParse(ligneTransaction[0], out uint identifiant))
-                                {
-                                    swTransactions.WriteLine($"{identifiant};KO");
-                                }
-                                else
-                                {
-                                    swTransactions.WriteLine("Identifiant illisible;KO");
-                                }
-                            }
+                            swTransactions.WriteLine(TraitementLigneTransaction(ligneTransaction));
                         }
                     }
 
-                    if (lecComptes.EndOfStream && lireCompte)
+                    if (lecComptes.EndOfStream && ligneCompteTraitee)
                     {
                         dateOperationCompte = DateTime.MaxValue;
                     }
-                    if (lecTransactions.EndOfStream && lireTransaction)
+                    if (lecTransactions.EndOfStream && ligneTransactionTraitee)
                     {
                         dateOperationTransaction = DateTime.MaxValue;
                     }
+                }
+            }
+        }
+
+        private string TraitementLigneCompte(string[] ligneCompte)
+        {
+            if (TraiterOperationCompte(ligneCompte))
+            {
+                return $"{ligneCompte[0]};OK";
+            }
+            else
+            {
+                if (uint.TryParse(ligneCompte[0], out uint identifiant))
+                {
+                    return $"{identifiant};KO";
+                }
+                else
+                {
+                    return "Identifiant illisible;KO";
+                }
+            }
+        }
+
+        private string TraitementLigneTransaction(string[] ligneTransaction)
+        {
+            if (TraiterOperationTransaction(ligneTransaction))
+            {
+                return $"{ligneTransaction[0]};OK";
+            }
+            else
+            {
+                if (uint.TryParse(ligneTransaction[0], out uint identifiant))
+                {
+                    return $"{identifiant};KO";
+                }
+                else
+                {
+                    return "Identifiant illisible;KO";
                 }
             }
         }
