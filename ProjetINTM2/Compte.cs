@@ -64,6 +64,10 @@ namespace ProjetINTM2
             _historiqueTemporel = new List<KeyValuePair<decimal,DateTime>>();
         }
 
+        /// <summary>
+        /// Constructeur de copie servant à l'échange de compte.
+        /// </summary>
+        /// <param name="compte">Compte à copier.</param>
         public Compte(Compte compte)
         {
             Identifiant = compte.Identifiant;
@@ -144,6 +148,12 @@ namespace ProjetINTM2
             return false;
         }
 
+        /// <summary>
+        /// Vérifie si la limite de retrait temporelle a été atteinte ou non.
+        /// </summary>
+        /// <param name="valVirement">Montant qu'on essayer de virer.</param>
+        /// <param name="dateEffet">Date du virement.</param>
+        /// <returns>True si la limite a été atteinte et False sinon.</returns>
         private bool RetraitMaxTemporelAtteint(decimal valVirement, DateTime dateEffet)
         {
             decimal totalVirements = valVirement;
@@ -193,6 +203,11 @@ namespace ProjetINTM2
             }
         }
 
+        /// <summary>
+        /// Rajoute un virement à l'historique temporel.
+        /// </summary>
+        /// <param name="valVirement">Valeur du virement à rajouter.</param>
+        /// <param name="dateEffet">Date d'effet du virement.</param>
         private void AjoutAHistoriqueTemporel(decimal valVirement, DateTime dateEffet)
         {
             _historiqueTemporel.Add(new KeyValuePair<decimal, DateTime>(valVirement, dateEffet));

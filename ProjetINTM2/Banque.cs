@@ -324,6 +324,14 @@ namespace ProjetINTM2
             return false;
         }
 
+        /// <summary>
+        /// Crée un compte dans le gestionnaire donné.
+        /// </summary>
+        /// <param name="idGestionnaire">Identifiant du gestionnaire où le compte va être créer.</param>
+        /// <param name="idCompte">Identifiant du compte à créer.</param>
+        /// <param name="dateCreation">Date de création du compte.</param>
+        /// <param name="solde">Solde initial du compte.</param>
+        /// <returns>True si la création a réussi et False sinon.</returns>
         private bool CreationCompte(uint idGestionnaire, uint idCompte, DateTime dateCreation, decimal solde)
         {
             if (_comptes.ContainsKey(idCompte) || !_gestionnaires.ContainsKey(idGestionnaire))
@@ -343,6 +351,13 @@ namespace ProjetINTM2
             return true;
         }
 
+        /// <summary>
+        /// Cloture un compte donné dans son gestionnaire correspondant.
+        /// </summary>
+        /// <param name="idGestionnaire">Identifiant du gestionnaire où le compte va être cloturé.</param>
+        /// <param name="idCompte">Identifiant du compte à cloturer.</param>
+        /// <param name="dateCloture">Date de cloturation du compte.</param>
+        /// <returns>True si la cloture a réussi et False sinon.</returns>
         private bool ClotureCompte(uint idGestionnaire, uint idCompte, DateTime dateCloture)
         {
             if (!_comptes.ContainsKey(idCompte) || !_gestionnaires.ContainsKey(idGestionnaire))
@@ -356,6 +371,14 @@ namespace ProjetINTM2
             return true;
         }
 
+        /// <summary>
+        /// Réalise l'échange d'un compte entre deux gestionnaires.
+        /// </summary>
+        /// <param name="idGestionnaireEntree">Identifiant du gestionnaire possédant le compte.</param>
+        /// <param name="idGestionnaireSortie">Identifiant du gestionnaire recevant le compte.</param>
+        /// <param name="idCompte">Identifiant du compte à échanger</param>
+        /// <param name="dateEchange">Date de l'échange du compte.</param>
+        /// <returns>True si l'échange a réussi et False sinon.</returns>
         private bool TransfertCompte(uint idGestionnaireEntree, uint idGestionnaireSortie, uint idCompte, DateTime dateEchange)
         {
             if (!_comptes.ContainsKey(idCompte) || !_gestionnaires.ContainsKey(idGestionnaireEntree) 
@@ -492,6 +515,10 @@ namespace ProjetINTM2
             }
         }
 
+        /// <summary>
+        /// Imprime dans un fichier le résumé des opérations et transactions réalisées jusqu'ici.
+        /// </summary>
+        /// <param name="statFilePath">Chemin vers le fichier de sortie contenant le résumé.</param>
         public void ImprimerCompteurs(string statFilePath)
         {
             using (FileStream fs = File.Create(statFilePath))
@@ -513,6 +540,13 @@ namespace ProjetINTM2
             }
         }
 
+        /// <summary>
+        /// Pour un virement entre deux comptes, détermine si des frais de gestion sont à payer.
+        /// </summary>
+        /// <param name="idCompteEntree">Identifiant du compte expéditeur.</param>
+        /// <param name="idCompteSortie">Identifiant du compte destinataire.</param>
+        /// <param name="montant">Valeur du virement.</param>
+        /// <returns>Un nombre correspondant aux frais de gestion à payer ou 0 si la transaction n'en cause aucun.</returns>
         private decimal CalculFrais(uint idCompteEntree, uint idCompteSortie, decimal montant)
         {
             if (idCompteEntree == 0 || _liaisonComptesGestionnaires[idCompteEntree] == _liaisonComptesGestionnaires[idCompteSortie])

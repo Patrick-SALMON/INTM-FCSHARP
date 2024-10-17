@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ProjetINTM2
 {
+    /// <summary>
+    /// Particulier ou Entreprise possédant un ou plusieurs comptes dans la banque.
+    /// </summary>
     class Gestionnaire
     {
         public uint Identifiant { get; private set; }
@@ -15,6 +18,13 @@ namespace ProjetINTM2
         
         private readonly Dictionary<uint, Compte> _comptes;
 
+        /// <summary>
+        /// Initialisation du gestionnaire.
+        /// </summary>
+        /// <param name="identifiant">Identifiant unique du gestionnaire.</param>
+        /// <param name="type">Type du gestionnaire, "Particulier" ou "Entreprise".</param>
+        /// <param name="nbTransRetMax">Nombre de transactions que l'on considère pour la limite de retrait maximale.</param>
+        /// <exception cref="ArgumentException"></exception>
         public Gestionnaire(uint identifiant, string type, int nbTransRetMax)
         {
             Identifiant = identifiant;
@@ -37,6 +47,11 @@ namespace ProjetINTM2
             _comptes = new Dictionary<uint, Compte>();
         }
 
+        /// <summary>
+        /// Ajout d'un compte dans le gestionnaire.
+        /// </summary>
+        /// <param name="compte">Objet compte à créer dans le gestionnaire.</param>
+        /// <returns>True si la création a réussi et False sinon.</returns>
         public bool CreationCompte(Compte compte)
         {
             if (_comptes.ContainsKey(compte.Identifiant))
@@ -47,6 +62,12 @@ namespace ProjetINTM2
             return true;
         }
 
+        /// <summary>
+        /// Cloturation d'un compte dans le gestionnaire.
+        /// </summary>
+        /// <param name="identifiant">Identifiant du compte à cloturer.</param>
+        /// <param name="dateCloture">Date de cloture.</param>
+        /// <returns>True si la cloturation a réussi et False sinon.</returns>
         public bool ClotureCompte(uint identifiant, DateTime dateCloture)
         {
             if (!CompteExistantEtActif(identifiant, dateCloture))
@@ -57,6 +78,12 @@ namespace ProjetINTM2
             return true;
         }
 
+        /// <summary>
+        /// Vérifie que le compte donné existe bien dans le gestionnaire et qu'il est encore actif.
+        /// </summary>
+        /// <param name="identifiant">Identifiant du compte à tester.</param>
+        /// <param name="dateOperation">Date de l'opération qu'on traite.</param>
+        /// <returns>True si le compte est existant et actif et False sinon.</returns>
         private bool CompteExistantEtActif(uint identifiant, DateTime dateOperation)
         {
             return _comptes.ContainsKey(identifiant) && dateOperation >= _comptes[identifiant].DateCreation && dateOperation < _comptes[identifiant].DateResiliation;
