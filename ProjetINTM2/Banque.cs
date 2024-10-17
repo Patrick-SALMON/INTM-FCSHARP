@@ -22,6 +22,11 @@ namespace ProjetINTM2
         private int _compteurEchec;
         private decimal _totalReussite;
 
+        /// <summary>
+        /// Chargement des gestionnaires et initialisation des attributs de Banque.
+        /// </summary>
+        /// <param name="gestionnairesFilePath">Chemin vers le fichier contenant les informations des gestionnaires.</param>
+        /// <exception cref="FileNotFoundException"></exception>
         public Banque(string gestionnairesFilePath)
         {
             _comptes = new Dictionary<uint, Compte>();
@@ -79,6 +84,15 @@ namespace ProjetINTM2
             }
         }
 
+        /// <summary>
+        /// Traite séquentiellement et selon l'ordre chronologique le fichier contenant les opérations sur les comptes et le fichier contenant
+        /// les transactions. Les fichiers sont supposés trié sur leur date d'opération et on écrit leur statut sur deux fichiers de sortie séparés.
+        /// </summary>
+        /// <param name="comptesFilePath">Chemin vers le fichier contenant les opérations sur les comptes.</param>
+        /// <param name="transactionsFilePath">Chemin vers le fichier contenant les transactions.</param>
+        /// <param name="comptesStatutFilePath">Chemin vers le fichier à écrire du statut des opérations sur les comptes.</param>
+        /// <param name="transactionsStatutFilePath">Chemin vers le fichier à écrire du statut des transactions.</param>
+        /// <exception cref="FileNotFoundException"></exception>
         public void TraiterOperations(string comptesFilePath, string transactionsFilePath, string comptesStatutFilePath, string transactionsStatutFilePath)
         {
             string[] ligneCompte = new string[0];
@@ -109,6 +123,7 @@ namespace ProjetINTM2
             using (FileStream fsStatutTransactions = File.Create(transactionsStatutFilePath))
             using (StreamWriter swTransactions = new StreamWriter(fsStatutTransactions))
             {
+                // Aucun traitement ne peut être fait si le fichier des comptes est vide.
                 if (lecComptes.EndOfStream)
                 {
                     return;
@@ -120,9 +135,11 @@ namespace ProjetINTM2
                 }
                 while (!lecComptes.EndOfStream || !lecTransactions.EndOfStream || !ligneCompteTraitee || !ligneTransactionTraitee)
                 {
+                    // Lecture de la prochaine ligne du fichier des comptes.
                     if (!lecComptes.EndOfStream && ligneCompteTraitee)
                     {
                         ligneCompte = lecComptes.ReadLine().Split(';');
+                        // On continue à lire tant que la ligne n'est pas correcte.
                         while (ligneCompte.Length != 5 || !DateTime.TryParseExact(ligneCompte[1], "d", CultureInfo.GetCultureInfo("fr-FR"), DateTimeStyles.None, out dateOperationCompte))
                         {
                             swComptes.WriteLine("Ligne illisible;KO");
@@ -134,9 +151,11 @@ namespace ProjetINTM2
                             ligneCompte = lecComptes.ReadLine().Split(';');
                         }
                     }
+                    // Lecture de la prochaine ligne du fichier des transactions.
                     if (!lecTransactions.EndOfStream && ligneTransactionTraitee)
                     {
                         ligneTransaction = lecTransactions.ReadLine().Split(';');
+                        // On continue à lire tant que la ligne n'est pas correcte.
                         while (ligneTransaction.Length != 5 || !DateTime.TryParseExact(ligneTransaction[1], "d", CultureInfo.GetCultureInfo("fr-FR"), DateTimeStyles.None, out dateOperationTransaction))
                         {
                             swTransactions.WriteLine("Ligne illisible;KO");
@@ -149,18 +168,21 @@ namespace ProjetINTM2
                         }
                     }
 
+                    // L'opération sur le compte est plus ancienne donc on l'exécute en premier.
                     if (dateOperationCompte < dateOperationTransaction)
                     {
                         ligneCompteTraitee = true;
                         ligneTransactionTraitee = false;
                         swComptes.WriteLine(TraitementLigneCompte(ligneCompte));
                     }
+                    // La transaction est plus ancienne donc on l'exécute en premier
                     else if (dateOperationCompte > dateOperationTransaction)
                     {
                         ligneCompteTraitee = false;
                         ligneTransactionTraitee = true;
                         swTransactions.WriteLine(TraitementLigneTransaction(ligneTransaction));
                     }
+                    // On exécute d'abord l'opération sur les comptes puis la transaction.
                     else if (dateOperationCompte == dateOperationTransaction)
                     {
                         ligneCompteTraitee = true;
@@ -173,6 +195,7 @@ namespace ProjetINTM2
                         }
                     }
 
+                    // On passe les dates à la valeur max si on est à la fin du fichier et que la dernière ligne a été traitée.
                     if (lecComptes.EndOfStream && ligneCompteTraitee)
                     {
                         dateOperationCompte = DateTime.MaxValue;
@@ -185,6 +208,11 @@ namespace ProjetINTM2
             }
         }
 
+        /// <summary>
+        /// Réalise l'opération sur les comptes donnée en entrée et renvoie l'identifiant du compte et son statut en sortie.
+        /// </summary>
+        /// <param name="ligneCompte">Ligne du fichier des opérations sur les comptes à tester.</param>
+        /// <returns>Une chaîne de caractères contenant l'identifiant du compte et le statut de l'opération (OK ou KO).</returns>
         private string TraitementLigneCompte(string[] ligneCompte)
         {
             if (TraiterOperationCompte(ligneCompte))
@@ -204,6 +232,11 @@ namespace ProjetINTM2
             }
         }
 
+        /// <summary>
+        /// Réalise la transaction donnée en entrée et renvoie l'identifiant de la transaction et son statut en sortie.
+        /// </summary>
+        /// <param name="ligneTransaction">Ligne du fichier des transactions à tester.</param>
+        /// <returns>Une chaîne de caractères contenant l'identifiant de la transaction et son statut (OK ou KO).</returns>
         private string TraitementLigneTransaction(string[] ligneTransaction)
         {
             if (TraiterOperationTransaction(ligneTransaction))
@@ -223,6 +256,11 @@ namespace ProjetINTM2
             }
         }
 
+        /// <summary>
+        /// Traitement d'une opération sur les comptes décrite en entrée.
+        /// </summary>
+        /// <param name="ligneFichier">Ligne du fichier des opérations sur les comptes à exécuter.</param>
+        /// <returns>True si l'opération s'est bien passée et False sinon.</returns>
         private bool TraiterOperationCompte(string[] ligneFichier)
         {
             // Vérification des champs du fichier
@@ -339,12 +377,10 @@ namespace ProjetINTM2
         }
 
         /// <summary>
-        /// Traitement d'une ou plusieurs transactions décritent dans un fichier formatté et impression du résultat de chaque transaction
-        /// dans un fichier de sortie.
+        /// Traitement d'une transaction décrite en entrée.
         /// </summary>
-        /// <param name="transactionsFilePath">Chemin vers le fichier des transactions.</param>
-        /// <param name="outFilePath">Chemin vers le fichier de sortie.</param>
-        /// <exception cref="FileNotFoundException"></exception>
+        /// <param name="ligneFichier">Ligne du fichier des transactions à exécuter.</param>
+        /// <returns>True si l'opération s'est bien passée et False sinon.</returns>
         private bool TraiterOperationTransaction(string[] ligneFichier)
         {
             // Liste des identifiants déjà vu dans le fichier.

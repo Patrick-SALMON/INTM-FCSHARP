@@ -20,7 +20,7 @@ namespace ProjetINTM2
         private const decimal _retraitMax = 1000;
         // La période est fixée à 7 jours donc une semaine.
         private readonly TimeSpan _periodeRetraitMaxTemporelle = new TimeSpan(7, 0, 0, 0);
-        private const decimal _retraitMaxTemporelle = 10000;
+        private const decimal _retraitMaxTemporelle = 2000;
         private readonly List<decimal> _historiqueVirement;
         private readonly List<KeyValuePair<decimal,DateTime>> _historiqueTemporel;
 

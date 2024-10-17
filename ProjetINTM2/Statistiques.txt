@@ -1,9 +1,9 @@
 Statistiques :
 Nombre de comptes : 6
 Nombre de transactions : 26
-Nombre de réussites : 22
-Nombre d'échecs : 4
-Montant total des réussites : 8600,00 euros
+Nombre de réussites : 21
+Nombre d'échecs : 5
+Montant total des réussites : 7900,00 euros
 
 Frais de gestions :
 3 : 0,00 euros
