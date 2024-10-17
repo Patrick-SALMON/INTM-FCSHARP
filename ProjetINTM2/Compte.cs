@@ -132,7 +132,7 @@ namespace ProjetINTM2
         {
             decimal totalVirements = valVirement;
 
-            for (int i = 0; i < _historiqueVirement.Count(); i++)
+            for (int i = 0; i < NombreTransactionsRetraitMax - 1 && i < _historiqueVirement.Count(); i++) 
             {
                 totalVirements += _historiqueVirement[i];
             }
@@ -170,15 +170,26 @@ namespace ProjetINTM2
         /// <param name="valVirement">Valeur du virement à rajouter.</param>
         private void AjoutAHistorique(decimal valVirement)
         {
-            // -1 car on considère toujours le virement actuel quand on vérifie si le maximum est atteint.
-            if (_historiqueVirement.Count() < NombreTransactionsRetraitMax - 1)
+            if (NombreTransactionsRetraitMax != 1)
             {
-                _historiqueVirement.Add(valVirement);
-            }
-            else
-            {
-                _historiqueVirement.RemoveAt(0);
-                _historiqueVirement.Add(valVirement);
+                // -1 car on considère toujours le virement actuel quand on vérifie si le maximum est atteint.
+                if (_historiqueVirement.Count() < NombreTransactionsRetraitMax - 1)
+                {
+                    _historiqueVirement.Add(valVirement);
+                }
+                else if (_historiqueVirement.Count() == NombreTransactionsRetraitMax - 1)
+                {
+                    _historiqueVirement.RemoveAt(0);
+                    _historiqueVirement.Add(valVirement);
+                }
+                else
+                {
+                    while (_historiqueVirement.Count() >= NombreTransactionsRetraitMax - 1)
+                    {
+                        _historiqueVirement.RemoveAt(0);
+                    }
+                    _historiqueVirement.Add(valVirement);
+                }
             }
         }
 

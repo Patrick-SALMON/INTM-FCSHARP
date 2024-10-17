@@ -13,8 +13,8 @@ namespace ProjetINTM2
         {
             try
             {
-                Banque banque = new Banque("../../Gestionnaires.csv");
-                banque.TraiterOperations("../../Comptes.csv", "../../Transactions.csv", "../../StatutComptes.csv", "../../StatutTransactions.csv");
+                Banque banque = new Banque("../../Test/Gestionnaires_3.txt");
+                banque.TraiterOperations("../../Test/Comptes_3.txt", "../../Test/Transactions_3.txt", "../../StatutComptes.csv", "../../StatutTransactions.csv");
                 banque.ImprimerCompteurs("../../Statistiques.txt");
             }
             catch (FileNotFoundException fe)

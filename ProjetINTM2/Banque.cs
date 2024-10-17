@@ -61,12 +61,13 @@ namespace ProjetINTM2
                         continue;
                     }
                     // Tentative de conversion et vérification que le nombre de transactions à considérer pour le retrait max est strictement positif.
-                    if (!int.TryParse(ligneFichier[2], out int nbTransRetMax) || nbTransRetMax <= 0)
+                    if (!int.TryParse(ligneFichier[2], out int nbTransRetMax) || nbTransRetMax < 0)
                     {
                         continue;
                     }
                     try
                     {
+                        nbTransRetMax++;
                         //lignefichier[1] contient le type du gestionnaire.
                         _gestionnaires.Add(identifiant, new Gestionnaire(identifiant, ligneFichier[1], nbTransRetMax));
                     }
@@ -108,9 +109,14 @@ namespace ProjetINTM2
             using (FileStream fsStatutTransactions = File.Create(transactionsStatutFilePath))
             using (StreamWriter swTransactions = new StreamWriter(fsStatutTransactions))
             {
-                if (lecComptes.EndOfStream || lecTransactions.EndOfStream)
+                if (lecComptes.EndOfStream)
                 {
                     return;
+                }
+                if (lecTransactions.EndOfStream)
+                {
+                    ligneTransactionTraitee = false;
+                    dateOperationTransaction = DateTime.MaxValue;
                 }
                 while (!lecComptes.EndOfStream || !lecTransactions.EndOfStream || !ligneCompteTraitee || !ligneTransactionTraitee)
                 {
@@ -433,7 +439,7 @@ namespace ProjetINTM2
                     _compteurEchec++;
                     return false;
                 }
-                _gestionnaires[_liaisonComptesGestionnaires[destinataire]].TotalFraisGestion += frais;
+                _gestionnaires[_liaisonComptesGestionnaires[expediteur]].TotalFraisGestion += frais;
                 _comptes[expediteur].Virement(montant, dateEffet);
                 _comptes[destinataire].Prelevement(montant - frais);
                 identifiantsTransactions.Add(identifiant);
@@ -477,11 +483,11 @@ namespace ProjetINTM2
             {
                 return 0;
             }
-            if (_gestionnaires[_liaisonComptesGestionnaires[idCompteSortie]].Type == "Particulier")
+            if (_gestionnaires[_liaisonComptesGestionnaires[idCompteEntree]].Type == "Particulier")
             {
                 return montant / 100;
             }
-            if (_gestionnaires[_liaisonComptesGestionnaires[idCompteSortie]].Type == "Entreprise")
+            if (_gestionnaires[_liaisonComptesGestionnaires[idCompteEntree]].Type == "Entreprise")
             {
                 return 10;
             }
