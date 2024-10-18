@@ -1,0 +1,11 @@
+Statistiques :
+Nombre de comptes : 4
+Nombre de transactions : 8
+Nombre de réussites : 3
+Nombre d'échecs : 5
+Montant total des réussites : 400,00 euros
+
+Frais de gestions :
+1 : 0,00 euros
+2 : 0,00 euros
+3 : 1,00 euros
