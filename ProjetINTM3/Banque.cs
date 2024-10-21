@@ -42,7 +42,7 @@ namespace ProjetINTM3
             {
                 throw new FileNotFoundException("Le fichier des gestionnaires n'a pas été trouvé", gestionnairesFilePath);
             }
-
+            
             using(FileStream fs = File.OpenRead(gestionnairesFilePath))
             using(StreamReader lecGestionnaires = new StreamReader(fs))
             {
