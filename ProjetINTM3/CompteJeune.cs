@@ -36,18 +36,24 @@ namespace ProjetINTM3
 
         public override bool PrelevementVerif(Transaction transaction)
         {
-            while (Age < 18 && DateDernierAnniversaire.CompareTo(transaction.DateEffet) < 0 && transaction.DateEffet - DateDernierAnniversaire >= PeriodeAvantAnniversaire)
+            if (transaction.DateEffet >= DateCreation && transaction.DateEffet < DateResiliation)
             {
-                IncrementerAge();
+                while (Age < 18 && DateDernierAnniversaire.CompareTo(transaction.DateEffet) < 0 && transaction.DateEffet - DateDernierAnniversaire >= PeriodeAvantAnniversaire)
+                {
+                    IncrementerAge();
+                }
             }
             return base.PrelevementVerif(transaction);
         }
 
         public override bool VirementVerif(Transaction transaction)
         {
-            while (Age < 18 && DateDernierAnniversaire.CompareTo(transaction.DateEffet) < 0 && transaction.DateEffet - DateDernierAnniversaire >= PeriodeAvantAnniversaire)
+            if (transaction.DateEffet >= DateCreation && transaction.DateEffet < DateResiliation)
             {
-                IncrementerAge();
+                while (Age < 18 && DateDernierAnniversaire.CompareTo(transaction.DateEffet) < 0 && transaction.DateEffet - DateDernierAnniversaire >= PeriodeAvantAnniversaire)
+                {
+                    IncrementerAge();
+                }
             }
             return base.VirementVerif(transaction);
         }

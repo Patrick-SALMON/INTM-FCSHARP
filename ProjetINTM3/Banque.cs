@@ -140,7 +140,7 @@ namespace ProjetINTM3
                     {
                         ligneCompte = lecComptes.ReadLine().Split(';');
                         // On continue à lire tant que la ligne n'est pas correcte.
-                        while (ligneCompte.Length != 5 || !DateTime.TryParseExact(ligneCompte[1], "d", CultureInfo.GetCultureInfo("fr-FR"), DateTimeStyles.None, out dateOperationCompte))
+                        while (ligneCompte.Length != 7 || !DateTime.TryParseExact(ligneCompte[2], "d", CultureInfo.GetCultureInfo("fr-FR"), DateTimeStyles.None, out dateOperationCompte))
                         {
                             swComptes.WriteLine("Ligne illisible;KO");
                             if (lecComptes.EndOfStream)
@@ -264,7 +264,7 @@ namespace ProjetINTM3
         private bool TraiterOperationCompte(string[] ligneFichier)
         {
             // Vérification des champs du fichier
-            if (ligneFichier.Length != 5)
+            if (ligneFichier.Length != 7)
             {
                 return false;
             }
@@ -274,19 +274,19 @@ namespace ProjetINTM3
                 return false;
             }
             // Tentative de conversion de la date.
-            if (!DateTime.TryParseExact(ligneFichier[1], "d", CultureInfo.GetCultureInfo("fr-FR"), DateTimeStyles.None, out DateTime dateOperation))
+            if (!DateTime.TryParseExact(ligneFichier[2], "d", CultureInfo.GetCultureInfo("fr-FR"), DateTimeStyles.None, out DateTime dateOperation))
             {
                 return false;
             }
             decimal solde;
             // Si le champ correspondant au solde est vide, on utilise la valeur par défaut du solde.
-            if (ligneFichier[2] == string.Empty)
+            if (ligneFichier[3] == string.Empty)
             {
                 solde = 0;
             }
             // Tentative de conversion du solde en autorisant les virgules et en considérant le point comme le séparateur décimal, on vérifie également
             // que le solde est positif.
-            else if (!decimal.TryParse(ligneFichier[2], NumberStyles.AllowDecimalPoint, CultureInfo.GetCultureInfo("en-US"), out solde)
+            else if (!decimal.TryParse(ligneFichier[3], NumberStyles.AllowDecimalPoint, CultureInfo.GetCultureInfo("en-US"), out solde)
                      || solde < 0)
             {
                 return false;
@@ -296,14 +296,23 @@ namespace ProjetINTM3
             uint gestionnaireSortie;
             // Vérification du gestionnaire d'entrée et de sortie et détermination de l'opération à réaliser.
             // Cas sans signification.
-            if (ligneFichier[3] == string.Empty && ligneFichier[4] == string.Empty)
+            if (ligneFichier[5] == string.Empty && ligneFichier[6] == string.Empty)
             {
                 return false;
             }
             // Cas de création de compte.
-            else if (ligneFichier[3] != string.Empty && ligneFichier[4] == string.Empty && uint.TryParse(ligneFichier[3], out gestionnaireEntree))
+            else if (ligneFichier[5] != string.Empty && ligneFichier[6] == string.Empty && uint.TryParse(ligneFichier[5], out gestionnaireEntree))
             {
-                if (CreationCompte(gestionnaireEntree, identifiant, dateOperation, solde))
+                int age = 0;
+                if (ligneFichier[1] == string.Empty || ligneFichier[1] != "C" && ligneFichier[1] != "J" && ligneFichier[1] != "L" && ligneFichier[1] != "T")
+                {
+                    return false;
+                }
+                if (ligneFichier[1] == "J" && (!int.TryParse(ligneFichier[4], out age) || age < 8 || age > 17)) 
+                {
+                    return false;
+                }
+                if (CreationCompte(gestionnaireEntree, identifiant, char.Parse(ligneFichier[1]), dateOperation, solde, age))
                 {
                     _compteurCompteCree++;
                     return true;
@@ -311,13 +320,17 @@ namespace ProjetINTM3
                 return false;
             }
             // Cas de cloture de compte.
-            else if (ligneFichier[4] != string.Empty && ligneFichier[3] == string.Empty && uint.TryParse(ligneFichier[4], out gestionnaireSortie))
+            else if (ligneFichier[6] != string.Empty && ligneFichier[5] == string.Empty && uint.TryParse(ligneFichier[6], out gestionnaireSortie))
             {
+                if (_comptes.ContainsKey(identifiant) && _comptes[identifiant] is CompteTerme compteTerme && compteTerme.Age < 5) 
+                {
+                    return false;
+                }
                 return ClotureCompte(gestionnaireSortie, identifiant, dateOperation);
             }
             // Cas de transfert de compte.
-            else if (ligneFichier[3] != string.Empty && ligneFichier[4] != string.Empty && uint.TryParse(ligneFichier[3], out gestionnaireEntree)
-                                                                                        && uint.TryParse(ligneFichier[4], out gestionnaireSortie))
+            else if (ligneFichier[5] != string.Empty && ligneFichier[6] != string.Empty && uint.TryParse(ligneFichier[5], out gestionnaireEntree)
+                                                                                        && uint.TryParse(ligneFichier[6], out gestionnaireSortie))
             {
                 return TransfertCompte(gestionnaireEntree, gestionnaireSortie, identifiant, dateOperation);
             }
@@ -332,14 +345,35 @@ namespace ProjetINTM3
         /// <param name="dateCreation">Date de création du compte.</param>
         /// <param name="solde">Solde initial du compte.</param>
         /// <returns>True si la création a réussi et False sinon.</returns>
-        private bool CreationCompte(uint idGestionnaire, uint idCompte, DateTime dateCreation, decimal solde)
+        private bool CreationCompte(uint idGestionnaire, uint idCompte, char typeCompte, DateTime dateCreation, decimal solde, int ageCompte)
         {
             if (_comptes.ContainsKey(idCompte) || !_gestionnaires.ContainsKey(idGestionnaire))
             {
                 return false;
             }
 
-            Compte compte = new Compte(idCompte, dateCreation, _gestionnaires[idGestionnaire].NombreTransactionsRetraitMax, solde);
+            Compte compte;
+
+            if (typeCompte == 'C')
+            {
+                compte = new Compte(idCompte, dateCreation, _gestionnaires[idGestionnaire].NombreTransactionsRetraitMax, solde);
+            }
+            else if (typeCompte == 'J')
+            {
+                compte = new CompteJeune(idCompte, dateCreation, _gestionnaires[idGestionnaire].NombreTransactionsRetraitMax, ageCompte, solde);
+            }
+            else if (typeCompte == 'L')
+            {
+                compte = new Livret(idCompte, dateCreation, _gestionnaires[idGestionnaire].NombreTransactionsRetraitMax, solde);
+            }
+            else if (typeCompte == 'T')
+            {
+                compte = new CompteTerme(idCompte, dateCreation, _gestionnaires[idGestionnaire].NombreTransactionsRetraitMax, solde);
+            }
+            else
+            {
+                return false;
+            }
 
             if (!_gestionnaires[idGestionnaire].CreationCompte(compte))
             {
@@ -473,6 +507,10 @@ namespace ProjetINTM3
 
             if (PrelevementSansExpediteur(transaction))
             {
+                if (_comptes[destinataire] is CompteJeune compteJeune && compteJeune.Age >= 18)
+                {
+                    ConvertirCompteJeune(destinataire);
+                }
                 _comptes[destinataire].Prelevement(montant);
                 identifiantsTransactions.Add(identifiant);
                 _totalReussite += montant;
@@ -482,6 +520,22 @@ namespace ProjetINTM3
             }
             else if (VirementSansDestinataire(transaction))
             {
+                if (_comptes[expediteur] is CompteJeune compteJeune && compteJeune.Age >= 18)
+                {
+                    ConvertirCompteJeune(expediteur);
+                }
+                if (_comptes[expediteur] is Livret)
+                {
+                    _compteurTransactions++;
+                    _compteurEchec++;
+                    return false;
+                }
+                if (_comptes[expediteur] is CompteTerme compteTerme && compteTerme.Age < 5)
+                {
+                    _compteurTransactions++;
+                    _compteurEchec++;
+                    return false;
+                }
                 _comptes[expediteur].Virement(montant, dateEffet);
                 identifiantsTransactions.Add(identifiant);
                 _totalReussite += montant;
@@ -491,6 +545,20 @@ namespace ProjetINTM3
             }
             else if (TransactionEntreDeuxComptes(transaction))
             {
+                if (_comptes[destinataire] is CompteJeune compteJeuneDest && compteJeuneDest.Age >= 18)
+                {
+                    ConvertirCompteJeune(destinataire);
+                }
+                if (_comptes[expediteur] is CompteJeune compteJeuneExpe && compteJeuneExpe.Age >= 18)
+                {
+                    ConvertirCompteJeune(expediteur);
+                }
+                if (_comptes[expediteur] is CompteTerme compteTerme && compteTerme.Age < 5)
+                {
+                    _compteurTransactions++;
+                    _compteurEchec++;
+                    return false;
+                }
                 decimal frais = CalculFrais(expediteur, destinataire, montant);
                 if (frais >= montant)
                 {
@@ -515,6 +583,13 @@ namespace ProjetINTM3
             }
         }
 
+        private void ConvertirCompteJeune(uint compteId)
+        {
+            Compte compte = new Compte(_comptes[compteId]);
+            _comptes[compteId] = compte;
+            _gestionnaires[_liaisonComptesGestionnaires[compteId]].RemplacerCompte(compteId, compte);
+        }
+
         /// <summary>
         /// Imprime dans un fichier le résumé des opérations et transactions réalisées jusqu'ici.
         /// </summary>
@@ -533,9 +608,29 @@ namespace ProjetINTM3
                 sw.WriteLine();
                 sw.WriteLine("Frais de gestions :");
 
-                foreach (KeyValuePair<uint,Gestionnaire> gestionnaire in _gestionnaires)
+                foreach (Gestionnaire gestionnaire in _gestionnaires.Values)
                 {
-                    sw.WriteLine($"{gestionnaire.Value.Identifiant} : {gestionnaire.Value.TotalFraisGestion:F2} euros");
+                    sw.WriteLine($"{gestionnaire.Identifiant} : {gestionnaire.TotalFraisGestion:F2} euros");
+                }
+
+                if (_comptes.Values.OfType<Livret>().Count() != 0 || _comptes.Values.OfType<CompteTerme>().Count() != 0)
+                {
+                    sw.WriteLine();
+                    sw.WriteLine("Intérêts :");
+
+                    foreach (Compte compte in _comptes.Values) 
+                    {
+                        if (compte is Livret livret)
+                        {
+                            livret.CalculerInteretCloture();
+                            sw.WriteLine($"{compte.Identifiant} : {livret.Interets:F2} euros");
+                        }
+                        else if (compte is CompteTerme compteTerme)
+                        {
+                            compteTerme.CalculerInteretCloture();
+                            sw.WriteLine($"{compte.Identifiant} : {compteTerme.Interets:F2} euros");
+                        }
+                    }
                 }
             }
         }

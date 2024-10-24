@@ -1,11 +1,12 @@
 Statistiques :
-Nombre de comptes : 4
-Nombre de transactions : 8
-Nombre de réussites : 3
-Nombre d'échecs : 5
-Montant total des réussites : 400,00 euros
+Nombre de comptes : 1
+Nombre de transactions : 0
+Nombre de réussites : 0
+Nombre d'échecs : 0
+Montant total des réussites : 0,00 euros
 
 Frais de gestions :
 1 : 0,00 euros
-2 : 0,00 euros
-3 : 1,00 euros
+
+Intérêts :
+800 : 0,24 euros

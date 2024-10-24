@@ -75,6 +75,24 @@ namespace ProjetINTM3
                 return false;
             }
             _comptes[identifiant].DateResiliation = dateCloture;
+            if (_comptes[identifiant] is Livret livret)
+            {
+                livret.DateDerniereTransaction = dateCloture;
+            }
+            if (_comptes[identifiant] is CompteTerme compteTerme)
+            {
+                compteTerme.DateDerniereTransaction = dateCloture;
+            }
+            return true;
+        }
+
+        public bool RemplacerCompte(uint identifiant, Compte compte)
+        {
+            if (!_comptes.ContainsKey(identifiant)) 
+            {
+                return false;
+            }
+            _comptes[identifiant] = compte;
             return true;
         }
 
