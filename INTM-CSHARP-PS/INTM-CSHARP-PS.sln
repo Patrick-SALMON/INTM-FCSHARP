@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjetINTM2", "..\ProjetINT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjetINTM3", "..\ProjetINTM3\ProjetINTM3.csproj", "{F71679BA-2620-4A44-AAEE-D13FFBBB6095}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Labyrinth", "..\Labyrinthe\Labyrinth.csproj", "{89FB2634-08AB-4C46-8410-24E55B1070CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{F71679BA-2620-4A44-AAEE-D13FFBBB6095}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F71679BA-2620-4A44-AAEE-D13FFBBB6095}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F71679BA-2620-4A44-AAEE-D13FFBBB6095}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89FB2634-08AB-4C46-8410-24E55B1070CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89FB2634-08AB-4C46-8410-24E55B1070CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89FB2634-08AB-4C46-8410-24E55B1070CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89FB2634-08AB-4C46-8410-24E55B1070CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
