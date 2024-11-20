@@ -192,7 +192,7 @@ namespace INTM_CSHARP_PS
             }
             */
 
-            Console.WriteLine("|--------------------------------------|");
+            /*Console.WriteLine("|--------------------------------------|");
             Console.WriteLine("|              Série 4                 |");
             Console.WriteLine("|--------------------------------------|\n");
 
@@ -311,11 +311,13 @@ namespace INTM_CSHARP_PS
             Console.WriteLine("\n|-------------------------------------------------|");
             Console.WriteLine("| Exercice IV - Emploi du temps professionnel     |");
             Console.WriteLine("|-------------------------------------------------|\n");
+            */
 
             // Keep the console window open
             Console.WriteLine("\n----------------------");
             Console.WriteLine("Appuyer sur une touche pour quitter.");
             Console.ReadKey();
+
         }
 
 

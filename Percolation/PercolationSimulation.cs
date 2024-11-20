@@ -85,6 +85,9 @@ namespace Percolation
                 }
 
                 percolation.Open(iRandom, jRandom);
+
+                percolation.DisplayPerco();
+
                 casesOuvertes++;
             }
             // On cast en double car tous les éléments de cette équation sont des int.

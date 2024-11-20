@@ -210,6 +210,7 @@ namespace Labyrinth
                 KeyValuePair<int,int> coordinates = cells.Pop();
                 i = coordinates.Key;
                 j = coordinates.Value;
+                //Thread.Sleep(1);
                 // On ne traite les coordonnées que si elles n'ont pas encore été visitées
                 if (!_maze[i, j]._visited) 
                 {

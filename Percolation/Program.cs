@@ -10,8 +10,8 @@ namespace Percolation
     {
         static void Main()
         {
-            int taille = 10;
-            int essais = 100;
+            int taille = 20;
+            int essais = 1;
 
             PercolationSimulation percolationSimulation = new PercolationSimulation();
 
